@@ -212,4 +212,13 @@ void main() {
       expect(decoded, equals('foobar'));
     });
   });
+
+  group("valid", () {
+    test("tryValidBase32", () {
+      var text = "JNQXMZLO";
+      expect(tryValidBase32(text), text);
+
+      expect(tryValidBase32(text.toLowerCase()), text);
+    });
+  });
 }

@@ -206,3 +206,37 @@ class base32 {
     return true;
   }
 }
+
+bool isValidBase32(String text,
+    {Encoding encoding = Encoding.standardRFC4648}) {
+  return base32._isValid(text, encoding: encoding);
+}
+
+Encoding? tryParseBase32Encoding(String text) {
+  for (var item in Encoding.values) {
+    if (isValidBase32(text, encoding: item)) {
+      return item;
+    }
+  }
+
+  return null;
+}
+
+String? tryValidBase32(String text,
+    {Encoding encoding = Encoding.standardRFC4648}) {
+  if (isValidBase32(text, encoding: encoding)) {
+    return text;
+  }
+
+  var e = tryParseBase32Encoding(text);
+  if (e == null) {
+    text = text.toUpperCase();
+    e = tryParseBase32Encoding(text);
+
+    if (e == null) {
+      return null;
+    }
+  }
+
+  return base32.encode(base32.decode(text, encoding: e), encoding: encoding);
+}
